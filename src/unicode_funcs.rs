@@ -19,16 +19,15 @@ use crate::tables::{
     CANONICAL_DECOMP_KEY, CANONICAL_DECOMP_VAL, MIRROR_KEY, MIRROR_VAL, SCRIPT_KEY, SCRIPT_VAL,
 };
 
-fn make_unicode_funcs() -> *mut hb_unicode_funcs_t {
+pub fn make_unicode_funcs() -> *mut hb_unicode_funcs_t {
     unsafe {
         let funcs_ptr = hb_unicode_funcs_create(null_mut());
         funcs_ptr
     }
 }
 
-pub fn install_unicode_funcs(buffer: &mut Buffer) {
+pub fn install_unicode_funcs(buffer: &mut Buffer, funcs_ptr: *mut hb_unicode_funcs_t) {
     // TODO: probably want to lazy static initialize this
-    let funcs_ptr = make_unicode_funcs();
     unsafe {
         hb_unicode_funcs_set_combining_class_func(
             funcs_ptr,
